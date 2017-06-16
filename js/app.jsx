@@ -3,8 +3,36 @@ var app = app || {};
 (function () {
   'use strict';
 
-  ReactDOM.render(
-    <h1>Hello, world</h1>,
+  class Toggle extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {isToggleOn: true};
+
+      this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+      this.setState(prevState => ({
+        isToggleOn: !prevState.isToggleOn
+      }));
+    }
+
+    render() {
+      return (
+        <button onClick={this.handleClick}>
+          {this.state.isToggleOn ? 'ON' : 'OFF'}
+        </button>
+      );
+    }
+  } // -- class Toggle
+
+
+  ReactDOM.render((
+      <div>
+        <h1>Hello, world</h1>
+        <Toggle />
+      </div>
+    ),
     document.getElementById('root')
   );
 
