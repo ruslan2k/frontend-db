@@ -3,10 +3,31 @@ var app = app || {};
 (function () {
   'use strict';
 
+  class ModelList extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        models: props.models
+      };
+    }
+
+    render() {
+      const listModels = this.state.models.map((model) =>
+        <li>{model}</li>
+      );
+      return (
+        <ul>{listModels}</ul>
+      );
+    }
+  }
+
   class NameForm extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {value: ''};
+      this.state = {
+        value: '',
+        models: ['one', 'two'],
+      };
 
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,12 +38,15 @@ var app = app || {};
     }
 
     handleSubmit(event) {
-      alert('A name was submitted: ' + this.state.value);
       event.preventDefault();
+      alert('A name was submitted: ' + this.state.value);
+      
     }
 
     render() {
       return (
+        <ModelList models={this.state.models} />
+        {/*
         <form onSubmit={this.handleSubmit}>
           <label>
             Name:
@@ -30,6 +54,7 @@ var app = app || {};
           </label>
           <input type="submit" value="Submit" />
         </form>
+        */}
       );
     }
   }
@@ -39,7 +64,6 @@ var app = app || {};
     constructor(props) {
       super(props);
       this.state = {isToggleOn: true};
-
       this.handleClick = this.handleClick.bind(this);
     }
 
