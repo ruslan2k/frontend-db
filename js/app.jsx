@@ -45,16 +45,14 @@ var app = app || {};
 
     render() {
       return (
-        <ModelList models={this.state.models} />
-        {/*
         <form onSubmit={this.handleSubmit}>
+          <ModelList models={this.state.models} />
           <label>
             Name:
             <input type="text" value={this.state.value} onChange={this.handleChange} />
           </label>
           <input type="submit" value="Submit" />
         </form>
-        */}
       );
     }
   }
