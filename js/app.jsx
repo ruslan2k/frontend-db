@@ -3,32 +3,45 @@ var app = app || {};
 (function () {
   'use strict';
 
+  function store (namespace, data) {
+    if (data) {
+      return localStorage.setItem(namespace, JSON.stringify(data));
+    }
+    
+    var store = localStorage.getItem(namespace);
+    return (store && JSON.parse(store)) || [];
+  }
+
   class ModelList extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        models: props.models
-      };
+      this.handleModelAdd = this.handleModelAdd.bind(this);
+      this.state = {models: props.models};
+    }
+
+    handleModelAdd(modelName) {
+      var models = this.state.models;
+      models.push(modelName);
+      this.setState({models: models});
     }
 
     render() {
-      const listModels = this.state.models.map((model) =>
+      const models = this.state.models;
+      const listModes = models.map((model) =>
         <li>{model}</li>
       );
       return (
-        <ul>{listModels}</ul>
+        <p>
+          <ul>{listModes}</ul>
+          <ModelForm onModelAdd={this.handleModelAdd} />
+        </p>
       );
     }
   }
 
-  class NameForm extends React.Component {
+  class ModelForm extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        value: '',
-        models: ['one', 'two'],
-      };
-
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -39,53 +52,24 @@ var app = app || {};
 
     handleSubmit(event) {
       event.preventDefault();
-      alert('A name was submitted: ' + this.state.value);
-      
+      this.props.onModelAdd(this.state.value);
     }
 
     render() {
       return (
         <form onSubmit={this.handleSubmit}>
-          <ModelList models={this.state.models} />
-          <label>
-            Name:
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
-          </label>
+          <input type="text" onChange={this.handleChange} />
           <input type="submit" value="Submit" />
         </form>
       );
     }
   }
 
-
-  class Toggle extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {isToggleOn: true};
-      this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-      this.setState(prevState => ({
-        isToggleOn: !prevState.isToggleOn
-      }));
-    }
-
-    render() {
-      return (
-        <button onClick={this.handleClick}>
-          {this.state.isToggleOn ? 'ON' : 'OFF'}
-        </button>
-      );
-    }
-  } // -- class Toggle
-
+  const models = ['First', 'Second', 'Third'];
 
   ReactDOM.render((
       <div>
-        <h1>Hello, world</h1>
-        <Toggle />
-        <NameForm />
+        <ModelList models={models} />
       </div>
     ),
     document.getElementById('root')
